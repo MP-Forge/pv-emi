@@ -7,9 +7,11 @@ This is a deliberately small model. A real EMI filter with shunt branches or
 multiple ports should be represented by a network/two-port model rather than
 being treated as a single series impedance.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
+
 import numpy as np
 
 

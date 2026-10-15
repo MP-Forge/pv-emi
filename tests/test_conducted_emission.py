@@ -36,7 +36,7 @@ def test_cm_and_dm_helpers_set_mode():
 
 def test_current_dbua_property():
     result = predict_conducted_emission([1e6], [1e-3], [10], [10])
-    np.testing.assert_allclose(result.current_magnitude_dbua, [60 + 20*np.log10(0.5)])
+    np.testing.assert_allclose(result.current_magnitude_dbua, [60 + 20 * np.log10(0.5)])
 
 
 def test_rejects_mismatched_array_lengths():

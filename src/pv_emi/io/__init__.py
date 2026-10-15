@@ -1,7 +1,7 @@
 from .impedance import (
+    interpolate_complex,
     load_impedance_csv,
     load_impedance_mat,
-    interpolate_complex,
 )
 
 __all__ = [

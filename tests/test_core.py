@@ -28,14 +28,8 @@ def test_noise_source_voltage():
 
 def test_two_port_cascade_identity():
     f = FrequencyGrid(np.array([1e3, 2e3]))
-    identity = TwoPortNetwork(
-        f,
-        np.ones(2), np.zeros(2), np.zeros(2), np.ones(2)
-    )
-    dut = TwoPortNetwork(
-        f,
-        np.array([2, 3]), np.array([4, 5]), np.array([6, 7]), np.array([8, 9])
-    )
+    identity = TwoPortNetwork(f, np.ones(2), np.zeros(2), np.zeros(2), np.ones(2))
+    dut = TwoPortNetwork(f, np.array([2, 3]), np.array([4, 5]), np.array([6, 7]), np.array([8, 9]))
     result = identity.cascade(dut)
     np.testing.assert_allclose(result.a, dut.a)
     np.testing.assert_allclose(result.b, dut.b)

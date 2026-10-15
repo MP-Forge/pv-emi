@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+
 import numpy as np
 
 from pv_emi.core.frequency import FrequencyGrid
@@ -41,7 +42,7 @@ class TwoPortNetwork:
             dtype=complex,
         )
 
-    def cascade(self, other: "TwoPortNetwork", name: str | None = None) -> "TwoPortNetwork":
+    def cascade(self, other: TwoPortNetwork, name: str | None = None) -> TwoPortNetwork:
         """Cascade two networks: T = T_self @ T_other."""
         if not np.array_equal(self.frequency.values, other.frequency.values):
             raise ValueError("Two-port networks must use the same frequency grid")
@@ -51,7 +52,7 @@ class TwoPortNetwork:
         d = self.c * other.b + self.d * other.d
         return TwoPortNetwork(self.frequency, a, b, c, d, name=name)
 
-    def inverse(self, name: str | None = None) -> "TwoPortNetwork":
+    def inverse(self, name: str | None = None) -> TwoPortNetwork:
         """Return the matrix inverse at every frequency."""
         det = self.a * self.d - self.b * self.c
         if np.any(np.isclose(det, 0.0)):
@@ -65,8 +66,10 @@ class TwoPortNetwork:
             name=name,
         )
 
-    def deembed(self, input_network: "TwoPortNetwork", output_network: "TwoPortNetwork", name: str | None = None) -> "TwoPortNetwork":
+    def deembed(
+        self, input_network: TwoPortNetwork, output_network: TwoPortNetwork, name: str | None = None
+    ) -> TwoPortNetwork:
         """Remove input and output networks from a measured cascade.
-            T_dut = T_in^-1 @ T_sys @ T_out^-1
+        T_dut = T_in^-1 @ T_sys @ T_out^-1
         """
         return input_network.inverse().cascade(self).cascade(output_network.inverse(), name=name)

@@ -93,16 +93,10 @@ def load_impedance_mat(
     """
     raw = loadmat(path, squeeze_me=True)
 
-    missing = [
-        field
-        for field in (frequency_field, impedance_field)
-        if field not in raw
-    ]
+    missing = [field for field in (frequency_field, impedance_field) if field not in raw]
     if missing:
         available = ", ".join(k for k in raw if not k.startswith("__"))
-        raise KeyError(
-            f"Missing MATLAB field(s): {missing}. Available fields: {available}"
-        )
+        raise KeyError(f"Missing MATLAB field(s): {missing}. Available fields: {available}")
 
     return Impedance(
         frequency=np.asarray(raw[frequency_field], dtype=float).reshape(-1),

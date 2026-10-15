@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+
 import numpy as np
 
 
@@ -42,7 +43,7 @@ class FrequencyGrid:
 
     def interpolate(self, source_frequency_hz: np.ndarray, source_values: np.ndarray) -> np.ndarray:
         """Linearly interpolate complex or real data onto this grid."""
-        
+
         source_frequency_hz = np.asarray(source_frequency_hz, dtype=float)
         source_values = np.asarray(source_values)
         if source_frequency_hz.ndim != 1 or source_values.ndim != 1:
@@ -53,8 +54,9 @@ class FrequencyGrid:
             raise ValueError("Source frequency must be strictly increasing")
         if self.start < source_frequency_hz[0] or self.stop > source_frequency_hz[-1]:
             raise ValueError("Interpolation requested outside source frequency range")
-        return np.interp(self.values, source_frequency_hz, source_values.real) + 1j * np.interp(
-            self.values, source_frequency_hz, source_values.imag
-        ) if np.iscomplexobj(source_values) else np.interp(
-            self.values, source_frequency_hz, source_values
+        return (
+            np.interp(self.values, source_frequency_hz, source_values.real)
+            + 1j * np.interp(self.values, source_frequency_hz, source_values.imag)
+            if np.iscomplexobj(source_values)
+            else np.interp(self.values, source_frequency_hz, source_values)
         )

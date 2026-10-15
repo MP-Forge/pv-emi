@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+
 import numpy as np
 
 from .frequency import FrequencyGrid
@@ -46,21 +47,21 @@ class Impedance:
     def imag(self) -> np.ndarray:
         return self.value.imag
 
-    def __add__(self, other: "Impedance") -> "Impedance":
+    def __add__(self, other: Impedance) -> Impedance:
         self._check_compatible(other)
         return Impedance(self.frequency, self.value + other.value, name=self.name)
 
-    def __sub__(self, other: "Impedance") -> "Impedance":
+    def __sub__(self, other: Impedance) -> Impedance:
         self._check_compatible(other)
         return Impedance(self.frequency, self.value - other.value, name=self.name)
 
-    def scale(self, factor: complex, name: str | None = None) -> "Impedance":
+    def scale(self, factor: complex, name: str | None = None) -> Impedance:
         return Impedance(self.frequency, self.value * factor, name=name or self.name)
 
-    def _check_compatible(self, other: "Impedance") -> None:
+    def _check_compatible(self, other: Impedance) -> None:
         if not np.array_equal(self.frequency.values, other.frequency.values):
             raise ValueError("Impedances must use the same frequency grid")
 
-    def interpolate(self, frequency: FrequencyGrid) -> "Impedance":
+    def interpolate(self, frequency: FrequencyGrid) -> Impedance:
         values = frequency.interpolate(self.frequency.values, self.value)
         return Impedance(frequency, values, name=self.name, metadata=dict(self.metadata))
